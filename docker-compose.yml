@@ -1,13 +1,13 @@
-version: '3'
 
 services:
   emqx1:
     image: emqx:5.8.0
     container_name: emqx1
+    hostname: emqx1
     environment:
-      - "EMQX_NODE_NAME=emqx@node1"
+      - "EMQX_NODE_NAME=emqx@172.20.0.2"
       - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
-      - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1]"
+      - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@172.20.0.2]"
     healthcheck:
       test: ["CMD", "/opt/emqx/bin/emqx", "ctl", "status"]
       interval: 5s
@@ -16,17 +16,17 @@ services:
     networks:
       emqx-bridge:
         aliases:
-          - node1
+          - emqx1
     ports:
       - 1883:1883
       - 8083:8083
       - 8084:8084
       - 8883:8883
       - 18083:18083
-    # volumes:
-    #   - $PWD/emqx1_data:/opt/emqx/data
 
 
 networks:
   emqx-bridge:
     driver: bridge
+
+
